@@ -38,10 +38,10 @@ namespace DataLayer.Models
 
         public Roles Roles { get; set; }
 
-        public List<Website> Websites { get; set; }
-
         [Display(Name = "Profile Picture")]
         public string PictureUrl { get; set; }
+
+        public List<Review> Reviews { get; set; }
     }
 
 }

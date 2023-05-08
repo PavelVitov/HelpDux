@@ -1,4 +1,5 @@
-﻿using DataLayer.Models;
+﻿using DataLayer.Database.Configurations;
+using DataLayer.Models;
 using DataLayer.Models.Enum;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
@@ -17,11 +18,15 @@ namespace DataLayer
 
         public DbSet<User> Users { get; set; }
         public DbSet<Website> Websites { get; set; }
+        public DbSet<Review> Reviews { get; set; }
 
-        //protected override void OnModelCreating(ModelBuilder modelBuilder)
-        //{
-        //    modelBuilder.ApplyConfiguration(new WebsiteCOnfigurations());
-        //    modelBuilder.ApplyConfiguration(new UserConfiguration());
-        //}
+
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.ApplyConfiguration(new WebsiteConfiguration());
+            modelBuilder.ApplyConfiguration(new UserConfiguration());
+            modelBuilder.ApplyConfiguration(new ReviewConfiguration());
+        }
     }
 }
