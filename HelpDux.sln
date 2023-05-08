@@ -3,11 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33516.290
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebLayer HelpDux", "HelpDux\WebLayer HelpDux.csproj", "{9BFA5319-8998-42AE-851A-312B72DF7B8B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebLayer HelpDux", "HelpDux\WebLayer HelpDux.csproj", "{9BFA5319-8998-42AE-851A-312B72DF7B8B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{49412BC3-316A-4DDE-B7FC-C812110F7DB6} = {49412BC3-316A-4DDE-B7FC-C812110F7DB6}
+		{CCDEFA70-16F8-4490-AB1A-520357E56A8A} = {CCDEFA70-16F8-4490-AB1A-520357E56A8A}
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataLayer", "DataLayer\DataLayer.csproj", "{49412BC3-316A-4DDE-B7FC-C812110F7DB6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataLayer", "DataLayer\DataLayer.csproj", "{49412BC3-316A-4DDE-B7FC-C812110F7DB6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessLayer", "BusinessLayer\BusinessLayer.csproj", "{CCDEFA70-16F8-4490-AB1A-520357E56A8A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusinessLayer", "BusinessLayer\BusinessLayer.csproj", "{CCDEFA70-16F8-4490-AB1A-520357E56A8A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

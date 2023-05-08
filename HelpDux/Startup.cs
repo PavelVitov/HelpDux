@@ -8,6 +8,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DataLayer.Repositories;
+using DataLayer.Repositories.Interfaces;
 
 namespace HelpDux
 {
@@ -24,6 +26,17 @@ namespace HelpDux
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddRazorPages();
+
+            //Repositories
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IWebsiteRepository, WebsiteRepository>();
+            services.AddScoped<IReviewRepository, ReviewRepository>();
+
+            //Services
+
+            //DbContext
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
