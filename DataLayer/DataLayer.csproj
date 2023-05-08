@@ -5,10 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Database\Configurations\" />
     <Folder Include="Database\Seeders\" />
     <Folder Include="Models\Exceptions\" />
-    <Folder Include="Repositories\Interfaces\" />
   </ItemGroup>
 
   <ItemGroup>
