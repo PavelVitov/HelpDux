@@ -20,8 +20,6 @@ namespace DataLayer
         public DbSet<Website> Websites { get; set; }
         public DbSet<Review> Reviews { get; set; }
 
-
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new WebsiteConfiguration());
