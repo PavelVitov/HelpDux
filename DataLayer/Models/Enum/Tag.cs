@@ -14,7 +14,10 @@ namespace DataLayer.Models.Enum
         Education,
         Health,
         Travel,
-        Entertainment
+        Entertainment,
+        Social_Media,
+        Search_Engine,
+        Code_Hosting
     }
 
 }

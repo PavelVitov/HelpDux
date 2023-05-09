@@ -1,4 +1,5 @@
 ﻿using DataLayer.Models;
+using DataLayer.Repositories.Exceptions;
 using DataLayer.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -12,7 +13,6 @@ namespace DataLayer.Repositories
     public class UserRepository : IUserRepository
     {
         private readonly HelpDuxDbContext _users;
-
         public UserRepository(HelpDuxDbContext users)
         {
             this._users = users;
@@ -25,44 +25,72 @@ namespace DataLayer.Repositories
 
         public async Task<User> GetUserByIdAsync(int id)
         {
-            return await _users.Users.FirstOrDefaultAsync(i => i.UserId == id);
+            var user = await _users.Users.FirstOrDefaultAsync(i => i.UserId == id);
+            if (user == null)
+            {
+                throw new EntityNotFoundException($"User not found.");
+            }
+            return user;
         }
 
         public async Task<User> GetUserByEmailAsync(string email)
         {
-            return await _users.Users.FirstOrDefaultAsync(e => e.Email == email);
+            var user = await _users.Users.FirstOrDefaultAsync(e => e.Email == email);
+            if (user == null)
+            {
+                throw new EntityNotFoundException($"User with email: {email} not found.");
+            }
+            return user;
         }
 
         public async Task<User> GetUserByUsernameAsync(string username)
         {
-            return await _users.Users.FirstOrDefaultAsync(u => u.Username == username);
+            var user = await _users.Users.FirstOrDefaultAsync(u => u.Username == username);
+            if (user == null)
+            {
+                throw new EntityNotFoundException($"User with username: {username} not found.");
+            }
+            return user;
         }
 
         public async Task CreateUserAsync(User user)
         {
+            bool emailExists = await _users.Users.AnyAsync(u => u.Email == user.Email);
+            if (emailExists)
+            {
+                throw new DuplicateEntityFoundException("Email already taken, please check your email inbox.");
+            }
+
+            bool usernameExists = await _users.Users.AnyAsync(u => u.Username == user.Username);
+            if (usernameExists)
+            {
+                throw new DuplicateEntityFoundException("Username already taken");
+            }
             await _users.Users.AddAsync(user);
-            await _users.SaveChangesAsync();
         }
 
         public async Task UpdateUserUsernameAsync(int userId, string newUsername)
         {
+            //Rememeber to add await _users.SaveChangesAsync();
+            bool usernameExists = await _users.Users.AnyAsync(u => u.Username == newUsername);
+            if (usernameExists)
+            {
+                throw new DuplicateEntityFoundException($"Username already taken.");
+            }
             User userToUpdate = await _users.Users.FindAsync(userId);
             userToUpdate.Username = newUsername;
-            await _users.SaveChangesAsync();
         }
 
         public async Task UpdateUserPasswordAsync(int userId, string newPassword)
         {
             User userToUpdate = await _users.Users.FindAsync(userId);
             userToUpdate.Password = newPassword;
-            await _users.SaveChangesAsync();
         }
 
         public async Task UpdateUserUrlPictureAsync(int userId, string newUrlPicture)
         {
             User userToUpdate = await _users.Users.FindAsync(userId);
             userToUpdate.PictureUrl = newUrlPicture;
-            await _users.SaveChangesAsync();
         }
 
         public async Task DeleteUserAsync(int id)
@@ -71,8 +99,11 @@ namespace DataLayer.Repositories
             if (user != null)
             {
                 _users.Users.Remove(user);
-                await _users.SaveChangesAsync();
-            }         
+            }
+            else
+            {
+                throw new EntityNotFoundException($"User not found.");
+            }
         }
     }
 }
