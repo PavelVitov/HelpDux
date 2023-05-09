@@ -1,5 +1,5 @@
 ﻿using DataLayer.Models;
-using DataLayer.Repositories.Exceptions;
+using DataLayer.Models.Exceptions;
 using DataLayer.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -71,7 +71,6 @@ namespace DataLayer.Repositories
 
         public async Task UpdateUserUsernameAsync(int userId, string newUsername)
         {
-            //Rememeber to add await _users.SaveChangesAsync();
             bool usernameExists = await _users.Users.AnyAsync(u => u.Username == newUsername);
             if (usernameExists)
             {

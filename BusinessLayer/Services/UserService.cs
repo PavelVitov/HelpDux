@@ -1,6 +1,6 @@
 ﻿using BusinessLayer.Services.Interfaces;
 using DataLayer.Models;
-using DataLayer.Repositories.Exceptions;
+using DataLayer.Models.Exceptions;
 using DataLayer.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -55,29 +55,20 @@ namespace BusinessLayer.Services
 
         public async Task CreateUserAsync(User user)
         {
-            var userWithEmail = await _userRepository.GetUserByEmailAsync(user.Email);
-            if (userWithEmail != null)
-            {
-                throw new DuplicateEntityFoundException("A user with the same email already exists.");
-            }
-
-            var userWithUsername = await _userRepository.GetUserByUsernameAsync(user.Username);
-            if (userWithUsername != null)
-            {
-                throw new DuplicateEntityFoundException("A user with the same username already exists.");
-            }
-
+            var userWithEmail = await this.GetUserByEmailAsync(user.Email);
+            var userWithUsername = await this.GetUserByUsernameAsync(user.Username);
             await _userRepository.CreateUserAsync(user);
         }
 
         public async Task UpdateUserUsernameAsync(int userId, string newUsername)
         {
-            var usernameExists = await _userRepository.GetUserByIdAsync(userId)
+            bool usernameExists = await this.GetUserByUsernameAsync(newUsername) != null;
             if (usernameExists)
             {
-                throw new DuplicateEntityFoundException($"Username already taken.");
+                throw new DuplicateEntityFoundException($"Username '{newUsername}' already exists.");
             }
-            User userToUpdate = await _userRepository.Users.FindAsync(userId);
+
+            await _userRepository.UpdateUserUsernameAsync(userId, newUsername);
         }
 
         public async Task UpdateUserPasswordAsync(int userId, string oldPassword, string newPassword)
@@ -92,14 +83,20 @@ namespace BusinessLayer.Services
             await _userRepository.UpdateUserPasswordAsync(userId, newPassword);
         }
 
-        public Task UpdateUserUrlPictureAsync(int userId, string newUrlPicture)
+        public async Task UpdateUserUrlPictureAsync(int userId, string newUrlPicture)
         {
-            throw new NotImplementedException();
+            //Check the Uri/Url stuff tomorrow, too late today - Check in GP tommorow
+            if (!Uri.TryCreate(newUrlPicture, UriKind.Absolute, out Uri uriResult) || !(uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps))
+            {
+                throw new ArgumentException("Invalid URL format");
+            }
+            await _userRepository.UpdateUserUrlPictureAsync(userId, newUrlPicture);
         }
 
-        public Task DeleteUserAsync(int id)
+        public async Task DeleteUserAsync(int id)
         {
-            throw new NotImplementedException();
+            var user = await this.GetUserByIdAsync(id);
+            await _userRepository.DeleteUserAsync(id);
         }
     }
 }
