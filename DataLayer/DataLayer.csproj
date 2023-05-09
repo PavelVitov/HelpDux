@@ -5,7 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Database\Seeders\" />
     <Folder Include="Models\Exceptions\" />
   </ItemGroup>
 
