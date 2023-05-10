@@ -1,5 +1,6 @@
 ﻿using BusinessLayer.Services.Interfaces;
 using DataLayer.Models;
+using DataLayer.Models.Exceptions;
 using DataLayer.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -15,41 +16,72 @@ namespace BusinessLayer.Services
         public WebsiteService(IWebsiteRepository websiteRepository)
         {
             this._websiteRepository = websiteRepository;
+        }   
+
+        public async Task<IEnumerable<Website>> GetAllWebsitesAsync()
+        {
+            return await _websiteRepository.GetAllWebsitesAsync();
         }
 
-        public Task CreateWebsiteAsync(Website website)
+        public async Task<Website> GetWebsiteByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            Website website = await _websiteRepository.GetWebsiteByIdAsync(id);
+            if (website == null)
+            {
+                throw new EntityNotFoundException("Website not found.");
+            }
+            return website;
         }
 
-        public Task DeleteWebsiteAsync(int id)
+        public async Task<Website> GetWebsiteByNameAsync(string name)
         {
-            throw new NotImplementedException();
+            Website website = await _websiteRepository.GetWebsiteByNameAsync(name);
+            if (website == null)
+            {
+                throw new EntityNotFoundException("Website not found.");
+            }
+            return website;
         }
 
-        public Task<List<Website>> GetAllWebsitesAsync()
+        public async Task<Website> GetWebsiteByUrlAsync(string url)
         {
-            throw new NotImplementedException();
+            if (!Uri.TryCreate(url, UriKind.Absolute, out Uri uri))
+            {
+                throw new EntityNotValidException("Invalid URL");
+            }
+
+            return await _websiteRepository.GetWebsiteByUrlAsync(url);
         }
 
-        public Task<Website> GetWebsiteByIdAsync(int id)
+        public async Task CreateWebsiteAsync(Website website)
         {
-            throw new NotImplementedException();
+            if (website == null)
+            {
+                throw new EntityNotFoundException("Website cannot be null");
+            }
+
+            if (!Uri.IsWellFormedUriString(website.Url, UriKind.Absolute))
+            {
+                throw new EntityNotValidException("Invalid URL format.");
+            }
+
+            await _websiteRepository.CreateWebsiteAsync(website);
         }
 
-        public Task<Website> GetWebsiteByNameAsync(string name)
+        public async Task UpdateWebsiteDescriptionAsync(int websiteId, string newDescription)
         {
-            throw new NotImplementedException();
-        }
+            if (string.IsNullOrEmpty(newDescription))
+            {
+                throw new EntityNotFoundException("The new description cannot be null or empty.");
+            }
 
-        public Task<Website> GetWebsiteByUrlAsync(string url)
-        {
-            throw new NotImplementedException();
+            await _websiteRepository.UpdateWebsiteDescriptionAsync(websiteId, newDescription);
         }
-
-        public Task UpdateWebsiteDescriptionAsync(int websiteId, string newDescription)
+       
+        public async Task DeleteWebsiteAsync(int id)
         {
-            throw new NotImplementedException();
+            await _websiteRepository.GetWebsiteByIdAsync(id);
+            await _websiteRepository.DeleteWebsiteAsync(id);
         }
     }
 }

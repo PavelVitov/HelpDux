@@ -49,11 +49,11 @@ namespace BusinessLayer.Services
         {
             if (string.IsNullOrEmpty(review.Comment))
             {
-                throw new ArgumentException("Review comment cannot be null or empty.");
+                throw new EntityNotFoundException("Review comment cannot be null or empty.");
             }
             if (review.Rating < 1 || review.Rating > 5)
             {
-                throw new ArgumentException("Review rating must be between 1 and 5.");
+                throw new EntityNotFoundException("Review rating must be between 1 and 5.");
             }
             await _reviewRepository.CreateReviewAsync(review);
         }
@@ -62,7 +62,7 @@ namespace BusinessLayer.Services
         {
             if (review == null)
             {
-                throw new ArgumentNullException("review", "Review cannot be null");
+                throw new EntityNotFoundException("Review cannot be empty");
             }
 
             await _reviewRepository.UpdateReviewAsync(review);

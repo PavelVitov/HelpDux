@@ -27,7 +27,7 @@ namespace BusinessLayer.Services
 
         public async Task<User> GetUserByIdAsync(int id)
         {
-            var user = await this._userRepository.GetUserByIdAsync(id);
+            var user = await _userRepository.GetUserByIdAsync(id);
             if (user == null)
             {
                 throw new EntityNotFoundException($"User not found.");
@@ -88,7 +88,7 @@ namespace BusinessLayer.Services
             bool oldPasswordMatches = BCrypt.Net.BCrypt.Verify(oldPassword, user.Password);
             if (!oldPasswordMatches)
             {
-                throw new Exception("The old password matches the current password, try agian.");
+                throw new OldPasswordMatchedException("The old password matches the current password, try agian.");
             }
 
             // Hash the new password
@@ -104,7 +104,7 @@ namespace BusinessLayer.Services
             //Check the Uri/Url stuff tomorrow, too late today - Check in GP tommorow
             if (!Uri.TryCreate(newUrlPicture, UriKind.Absolute, out Uri uriResult) || !(uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps))
             {
-                throw new ArgumentException("Invalid URL format");
+                throw new EntityNotValidException("Invalid URL format");
             }
             await _userRepository.UpdateUserUrlPictureAsync(userId, newUrlPicture);
         }
