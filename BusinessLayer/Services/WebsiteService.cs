@@ -1,5 +1,6 @@
 ﻿using BusinessLayer.Services.Interfaces;
 using DataLayer.Models;
+using DataLayer.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,10 +11,10 @@ namespace BusinessLayer.Services
 {
     public class WebsiteService : IWebsiteService
     {
-        private readonly IWebsiteService _websiteService;
-        public WebsiteService(IWebsiteService websiteService)
+        private readonly IWebsiteRepository _websiteRepository;
+        public WebsiteService(IWebsiteRepository websiteRepository)
         {
-            this._websiteService = websiteService;
+            this._websiteRepository = websiteRepository;
         }
 
         public Task CreateWebsiteAsync(Website website)

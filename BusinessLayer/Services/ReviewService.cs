@@ -1,5 +1,7 @@
 ﻿using BusinessLayer.Services.Interfaces;
 using DataLayer.Models;
+using DataLayer.Models.Exceptions;
+using DataLayer.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,39 +12,74 @@ namespace BusinessLayer.Services
 {
     public class ReviewService : IReviewService
     {
-        private readonly IReviewService _reviewService;
-        public ReviewService(IReviewService reviewService)
+        private readonly IReviewRepository _reviewRepository;
+        public ReviewService(IReviewRepository reviewRepository)
         {
-            this._reviewService = reviewService;
-        }
-        public Task CreateReviewAsync(Review review)
+            this._reviewRepository = reviewRepository;
+        }    
+
+        public async Task<List<Review>> GetAllReviewsAsync()
         {
-            throw new NotImplementedException();
+            return await _reviewRepository.GetAllReviewsAsync();
         }
 
-        public Task DeleteReviewAsync(int id)
+        public async Task<Review> GetReviewByIdAsync(int reviewId)
         {
-            throw new NotImplementedException();
+            var review = await _reviewRepository.GetReviewByIdAsync(reviewId);
+            if (review == null)
+            {
+                throw new EntityNotFoundException($"Review with id {reviewId} was not found.");
+            }
+
+            return review;
         }
 
-        public Task<List<Review>> GetAllReviewsAsync()
+        public async Task<List<Review>> GetReviewsByWebsiteIdAsync(int websiteId)
         {
-            throw new NotImplementedException();
+            var review = await _reviewRepository.GetReviewsByWebsiteIdAsync(websiteId);
+            if (review == null)
+            {
+                throw new EntityNotFoundException($"Review related to website with id {websiteId} was not found.");
+            }
+
+            return review;
         }
 
-        public Task<Review> GetReviewByIdAsync(int reviewId)
+        public async Task CreateReviewAsync(Review review)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrEmpty(review.Comment))
+            {
+                throw new ArgumentException("Review comment cannot be null or empty.");
+            }
+            if (review.Rating < 1 || review.Rating > 5)
+            {
+                throw new ArgumentException("Review rating must be between 1 and 5.");
+            }
+            await _reviewRepository.CreateReviewAsync(review);
         }
 
-        public Task<List<Review>> GetReviewsByWebsiteIdAsync(int websiteId)
+        public async Task UpdateReviewAsync(Review review)
         {
-            throw new NotImplementedException();
+            if (review == null)
+            {
+                throw new ArgumentNullException("review", "Review cannot be null");
+            }
+
+            await _reviewRepository.UpdateReviewAsync(review);
         }
 
-        public Task UpdateReviewAsync(Review review)
+        public async Task DeleteReviewAsync(int id)
         {
-            throw new NotImplementedException();
+            // Retrieve the review by id
+            var reviewToDelete = await _reviewRepository.GetReviewByIdAsync(id);
+
+            if (reviewToDelete == null)
+            {
+                throw new EntityNotFoundException($"Review with id {id} not found");
+            }
+
+            // Delete the review from the repository
+            await _reviewRepository.DeleteReviewAsync(id);
         }
     }
 }

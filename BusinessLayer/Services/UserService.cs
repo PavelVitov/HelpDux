@@ -5,8 +5,10 @@ using DataLayer.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using BCrypt.Net;
 
 namespace BusinessLayer.Services
 {
@@ -55,8 +57,15 @@ namespace BusinessLayer.Services
 
         public async Task CreateUserAsync(User user)
         {
-            var userWithEmail = await this.GetUserByEmailAsync(user.Email);
-            var userWithUsername = await this.GetUserByUsernameAsync(user.Username);
+            await this.GetUserByEmailAsync(user.Email);
+            await this.GetUserByUsernameAsync(user.Username);
+
+            // Hash the user's password
+            string hashedPassword = BCrypt.Net.BCrypt.HashPassword(user.Password);
+
+            // Set the user's password to the hashed password
+            user.Password = hashedPassword;
+
             await _userRepository.CreateUserAsync(user);
         }
 
@@ -75,11 +84,18 @@ namespace BusinessLayer.Services
         {
             var user = await this.GetUserByIdAsync(userId);
 
-            if (user.Password == oldPassword)
+            // Hash the old password and compare it to the user's current password hash
+            bool oldPasswordMatches = BCrypt.Net.BCrypt.Verify(oldPassword, user.Password);
+            if (!oldPasswordMatches)
             {
-                throw new OldPasswordMatchedException("New password cannot match old password.");
+                throw new Exception("The old password matches the current password, try agian.");
             }
 
+            // Hash the new password
+            string hashedPassword = BCrypt.Net.BCrypt.HashPassword(newPassword);
+
+            // Set the user's password to the hashed password
+            user.Password = hashedPassword;
             await _userRepository.UpdateUserPasswordAsync(userId, newPassword);
         }
 
@@ -96,7 +112,15 @@ namespace BusinessLayer.Services
         public async Task DeleteUserAsync(int id)
         {
             var user = await this.GetUserByIdAsync(id);
-            await _userRepository.DeleteUserAsync(id);
+            if (user != null)
+            {
+                await _userRepository.DeleteUserAsync(id);
+            }
+            else
+            {
+                throw new EntityNotFoundException($"User not found.");
+            }
         }
+
     }
 }
