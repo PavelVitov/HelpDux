@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -25,84 +26,52 @@ namespace DataLayer.Repositories
 
         public async Task<User> GetUserByIdAsync(int id)
         {
-            var user = await _users.Users.FirstOrDefaultAsync(i => i.UserId == id);
-            if (user == null)
-            {
-                throw new EntityNotFoundException($"User not found.");
-            }
-            return user;
+            return await _users.Users.FirstOrDefaultAsync(i => i.UserId == id);
         }
 
         public async Task<User> GetUserByEmailAsync(string email)
         {
-            var user = await _users.Users.FirstOrDefaultAsync(e => e.Email == email);
-            if (user == null)
-            {
-                throw new EntityNotFoundException($"User with email: {email} not found.");
-            }
-            return user;
+            return await _users.Users.FirstOrDefaultAsync(e => e.Email == email);          
         }
 
         public async Task<User> GetUserByUsernameAsync(string username)
         {
-            var user = await _users.Users.FirstOrDefaultAsync(u => u.Username == username);
-            if (user == null)
-            {
-                throw new EntityNotFoundException($"User with username: {username} not found.");
-            }
-            return user;
+            return await _users.Users.FirstOrDefaultAsync(u => u.Username == username);         
         }
 
         public async Task CreateUserAsync(User user)
         {
-            bool emailExists = await _users.Users.AnyAsync(u => u.Email == user.Email);
-            if (emailExists)
-            {
-                throw new DuplicateEntityFoundException("Email already taken, please check your email inbox.");
-            }
-
-            bool usernameExists = await _users.Users.AnyAsync(u => u.Username == user.Username);
-            if (usernameExists)
-            {
-                throw new DuplicateEntityFoundException("Username already taken");
-            }
             await _users.Users.AddAsync(user);
+            await _users.SaveChangesAsync();
         }
 
         public async Task UpdateUserUsernameAsync(int userId, string newUsername)
-        {
-            bool usernameExists = await _users.Users.AnyAsync(u => u.Username == newUsername);
-            if (usernameExists)
-            {
-                throw new DuplicateEntityFoundException($"Username already taken.");
-            }
+        {            
             User userToUpdate = await _users.Users.FindAsync(userId);
             userToUpdate.Username = newUsername;
+            await _users.SaveChangesAsync();
         }
 
         public async Task UpdateUserPasswordAsync(int userId, string newPassword)
         {
             User userToUpdate = await _users.Users.FindAsync(userId);
             userToUpdate.Password = newPassword;
+            await _users.SaveChangesAsync();
         }
 
         public async Task UpdateUserUrlPictureAsync(int userId, string newUrlPicture)
         {
             User userToUpdate = await _users.Users.FindAsync(userId);
             userToUpdate.PictureUrl = newUrlPicture;
+            await _users.SaveChangesAsync();
         }
 
         public async Task DeleteUserAsync(int id)
         {
-            var user = await _users.Users.FindAsync(id);
-            if (user != null)
-            {
-                _users.Users.Remove(user);
-            }
-            else
-            {
-                throw new EntityNotFoundException($"User not found.");
-            }
+            var user = await _users.Users.FindAsync(id); 
+            _users.Users.Remove(user);
+            await _users.SaveChangesAsync();
         }
+
     }
 }

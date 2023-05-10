@@ -36,16 +36,17 @@ namespace DataLayer.Repositories
 
         public async Task CreateReviewAsync(Review review)
         {
-            review.CreatedAt = DateTime.Now;
             _reviews.Reviews.Add(review);
             await _reviews.SaveChangesAsync();
         }
 
         public async Task UpdateReviewAsync(Review review)
         {
+            review.UpdatedAt = DateTime.Now;
             _reviews.Reviews.Update(review);
             await _reviews.SaveChangesAsync();
         }
+
         public async Task DeleteReviewAsync(int id)
         {
             var review = await _reviews.Reviews.FindAsync(id);

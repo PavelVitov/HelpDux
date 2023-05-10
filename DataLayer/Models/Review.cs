@@ -9,6 +9,11 @@ namespace DataLayer.Models
 {
     public class Review
     {
+        public Review()
+        {
+            CreatedAt = DateTime.UtcNow;
+        }
+
         [Key]
         public int ReviewId { get; set; }
         [Display(Name = "Comment")]
@@ -19,6 +24,7 @@ namespace DataLayer.Models
         public int UserId { get; set; }
         public User User { get; set; }
         public DateTime CreatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
     }
 
 }
