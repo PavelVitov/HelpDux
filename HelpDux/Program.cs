@@ -22,5 +22,11 @@ namespace HelpDux
                 {
                     webBuilder.UseStartup<Startup>();
                 });
+                //.ConfigureLogging(logging =>
+                //{
+                //    logging.ClearProviders();
+                //    logging.AddConsole();
+                //});
+
     }
 }

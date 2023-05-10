@@ -10,6 +10,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using DataLayer.Repositories;
 using DataLayer.Repositories.Interfaces;
+using BusinessLayer.Services.Interfaces;
+using BusinessLayer.Services;
+using DataLayer;
+using Microsoft.EntityFrameworkCore;
 
 namespace HelpDux
 {
@@ -33,9 +37,13 @@ namespace HelpDux
             services.AddScoped<IReviewRepository, ReviewRepository>();
 
             //Services
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IWebsiteService, WebsiteService>();
+            services.AddScoped<IReviewService, ReviewService>();
 
             //DbContext
-
+            services.AddDbContext<HelpDuxDbContext>(options =>
+                    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
         }
 
