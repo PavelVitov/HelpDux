@@ -11,7 +11,7 @@ namespace DataLayer.Models
     using System.ComponentModel.DataAnnotations;
 
     public class Website
-    {
+    {       
         [Key]
         public int WebsiteId { get; set; }
         public string Name { get; set; }     
@@ -23,6 +23,10 @@ namespace DataLayer.Models
         public bool IsActive { get; set; }
         public string ImageUrl { get; set; }
         public List<Review> Reviews { get; set; }
+        public Website()
+        {
+            CreatedAt = DateTime.UtcNow;
+        }
     }
 
 }
