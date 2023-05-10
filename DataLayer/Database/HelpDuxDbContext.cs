@@ -1,11 +1,6 @@
 ﻿using DataLayer.Database.Configurations;
 using DataLayer.Models;
-using DataLayer.Models.Enum;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace DataLayer
 {

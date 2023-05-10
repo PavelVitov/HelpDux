@@ -4,11 +4,7 @@ using DataLayer.Models.Exceptions;
 using DataLayer.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
 using System.Threading.Tasks;
-using BCrypt.Net;
 
 namespace BusinessLayer.Services
 {
