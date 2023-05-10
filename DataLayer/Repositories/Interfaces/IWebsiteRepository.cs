@@ -9,7 +9,7 @@ namespace DataLayer.Repositories.Interfaces
 {
     public interface IWebsiteRepository
     {
-        Task<List<Website>> GetAllWebsitesAsync();
+        Task<IEnumerable<Website>> GetAllWebsitesAsync();
         Task<Website> GetWebsiteByIdAsync(int id);
         Task<Website> GetWebsiteByNameAsync(string name);
         Task<Website> GetWebsiteByUrlAsync(string url);

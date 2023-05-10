@@ -42,7 +42,7 @@ namespace DataLayer.Repositories
 
         public async Task UpdateReviewAsync(Review review)
         {
-            review.UpdatedAt = DateTime.Now;
+            review.UpdatedAt = DateTime.UtcNow;
             _reviews.Reviews.Update(review);
             await _reviews.SaveChangesAsync();
         }

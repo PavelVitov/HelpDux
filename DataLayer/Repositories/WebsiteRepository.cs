@@ -18,7 +18,7 @@ namespace DataLayer.Repositories
             this._websites = websites;
         }
 
-        public async Task<List<Website>> GetAllWebsitesAsync()
+        public async Task<IEnumerable<Website>> GetAllWebsitesAsync()
         {
             return await _websites.Websites.ToListAsync();
         }
@@ -40,7 +40,6 @@ namespace DataLayer.Repositories
 
         public async Task CreateWebsiteAsync(Website website)
         {
-            website.CreatedAt = DateTime.Now;
             await _websites.Websites.AddAsync(website);
             await _websites.SaveChangesAsync();
         }
@@ -49,7 +48,7 @@ namespace DataLayer.Repositories
         {
             Website websiteToUpdate = await _websites.Websites.FindAsync(websiteId);
             websiteToUpdate.Description = newDescription;
-            websiteToUpdate.UpdatedAt = DateTime.Now;
+            websiteToUpdate.UpdatedAt = DateTime.UtcNow;
             await _websites.SaveChangesAsync();
         }
 
