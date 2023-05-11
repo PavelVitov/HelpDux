@@ -11,7 +11,9 @@
         Entertainment,
         Social_Media,
         Search_Engine,
-        Code_Hosting
+        Code_Hosting,
+        Video_Sharing,
+        Music
     }
 
 }
