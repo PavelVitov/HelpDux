@@ -1,4 +1,5 @@
-﻿using DataLayer.Models;
+﻿using DataLayer.Database.Seeders;
+using DataLayer.Models;
 using DataLayer.Models.Enum;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -51,6 +52,8 @@ namespace DataLayer.Database.Configurations
 
             builder.HasIndex(u => u.Username).IsUnique();
             builder.HasIndex(u => u.Email).IsUnique();
+
+            builder.HasData(UserSeeder.UserSeeding);
         }
 
     }

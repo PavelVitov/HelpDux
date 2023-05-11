@@ -1,4 +1,5 @@
-﻿using DataLayer.Models;
+﻿using DataLayer.Database.Seeders;
+using DataLayer.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -54,6 +55,8 @@ namespace DataLayer.Database.Configurations
             builder.HasOne(r => r.User)
                 .WithMany(u => u.Reviews)
                 .HasForeignKey(r => r.UserId);
+
+            builder.HasData(ReviewSeeder.ReviewSeeding);
         }
 
     }

@@ -1,4 +1,5 @@
-﻿using DataLayer.Models;
+﻿using DataLayer.Database.Seeders;
+using DataLayer.Models;
 using DataLayer.Models.Enum;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -51,6 +52,8 @@ namespace DataLayer.Database.Configurations
 
             builder.HasIndex(w => w.Name).IsUnique();
             builder.HasIndex(w => w.Url).IsUnique();
+
+            builder.HasData(WebsiteSeeder.WebsiteSeeding);
         }
 
     }
