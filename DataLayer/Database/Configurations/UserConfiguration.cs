@@ -48,6 +48,9 @@ namespace DataLayer.Database.Configurations
                 .HasConversion(
                     v => v.ToString(),
                     v => (Roles)Enum.Parse(typeof(Roles), v));
+
+            builder.HasIndex(u => u.Username).IsUnique();
+            builder.HasIndex(u => u.Email).IsUnique();
         }
 
     }

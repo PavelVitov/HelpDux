@@ -25,6 +25,12 @@ namespace HelpDux
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //For MsSQL connection
+            var connectionString = Configuration.GetConnectionString("DefaultConnection");
+            services.AddDbContext<HelpDuxDbContext>(options =>
+                    options.UseSqlServer(connectionString));
+
+            //Razor pages
             services.AddRazorPages();
 
             //Mapper

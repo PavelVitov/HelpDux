@@ -48,6 +48,9 @@ namespace DataLayer.Database.Configurations
             builder.HasMany(w => w.Reviews)
                 .WithOne(r => r.Website)
                 .HasForeignKey(r => r.WebsiteId);
+
+            builder.HasIndex(w => w.Name).IsUnique();
+            builder.HasIndex(w => w.Url).IsUnique();
         }
 
     }

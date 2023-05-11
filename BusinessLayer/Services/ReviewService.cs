@@ -1,4 +1,5 @@
-﻿using BusinessLayer.Services.Interfaces;
+﻿using AutoMapper;
+using BusinessLayer.Services.Interfaces;
 using DataLayer.Models;
 using DataLayer.Models.Exceptions;
 using DataLayer.Repositories.Interfaces;
@@ -10,9 +11,12 @@ namespace BusinessLayer.Services
     public class ReviewService : IReviewService
     {
         private readonly IReviewRepository _reviewRepository;
-        public ReviewService(IReviewRepository reviewRepository)
+        private readonly IMapper _mapper;
+
+        public ReviewService(IReviewRepository reviewRepository, IMapper mapper)
         {
             this._reviewRepository = reviewRepository;
+            this._mapper = mapper;
         }    
 
         public async Task<List<Review>> GetAllReviewsAsync()
