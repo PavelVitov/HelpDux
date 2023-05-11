@@ -1,19 +1,15 @@
+using BusinessLayer.AutoMapper;
+using BusinessLayer.Services;
+using BusinessLayer.Services.Interfaces;
+using DataLayer;
+using DataLayer.Repositories;
+using DataLayer.Repositories.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using DataLayer.Repositories;
-using DataLayer.Repositories.Interfaces;
-using BusinessLayer.Services.Interfaces;
-using BusinessLayer.Services;
-using DataLayer;
-using Microsoft.EntityFrameworkCore;
 
 namespace HelpDux
 {
@@ -30,6 +26,9 @@ namespace HelpDux
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddRazorPages();
+
+            //Mapper
+            services.AddAutoMapper(typeof(AutoMapperProfile));
 
             //Repositories
             services.AddScoped<IUserRepository, UserRepository>();
@@ -62,6 +61,7 @@ namespace HelpDux
             }
 
             app.UseHttpsRedirection();
+
             app.UseStaticFiles();
 
             app.UseRouting();

@@ -25,12 +25,6 @@ namespace DataLayer.Models
         [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,100}$", ErrorMessage = "Password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character.")]
         [Display(Name = "Password")]
         public string Password { get; set; }
-
-        //[Compare("Password", ErrorMessage = "Passwords do not match")]
-        //[DataType(DataType.Password)]
-        //[Display(Name = "Confirm Password")]
-        //public string ConfirmPassword { get; set; }
-
         public Roles Roles { get; set; }
 
         [Display(Name = "Profile Picture")]
