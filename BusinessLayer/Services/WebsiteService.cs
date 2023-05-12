@@ -1,4 +1,6 @@
-﻿using BusinessLayer.Services.Interfaces;
+﻿using AutoMapper;
+using BusinessLayer.DTOs;
+using BusinessLayer.Services.Interfaces;
 using DataLayer.Models;
 using DataLayer.Models.Exceptions;
 using DataLayer.Repositories.Interfaces;
@@ -11,60 +13,67 @@ namespace BusinessLayer.Services
     public class WebsiteService : IWebsiteService
     {
         private readonly IWebsiteRepository _websiteRepository;
-        public WebsiteService(IWebsiteRepository websiteRepository)
+        private readonly IMapper _mapper;
+
+        public WebsiteService(IWebsiteRepository websiteRepository, IMapper mapper)
         {
             this._websiteRepository = websiteRepository;
-        }   
-
-        public async Task<IEnumerable<Website>> GetAllWebsitesAsync()
-        {
-            return await _websiteRepository.GetAllWebsitesAsync();
+            this._mapper = mapper;
         }
 
-        public async Task<Website> GetWebsiteByIdAsync(int id)
+        public async Task<IEnumerable<WebsiteDTO>> GetAllWebsitesAsync()
         {
-            Website website = await _websiteRepository.GetWebsiteByIdAsync(id);
+            var websites = await _websiteRepository.GetAllWebsitesAsync();
+            return _mapper.Map<IEnumerable<WebsiteDTO>>(websites);
+        }
+
+        public async Task<WebsiteDTO> GetWebsiteByIdAsync(int id)
+        {
+            var website = await _websiteRepository.GetWebsiteByIdAsync(id);
             if (website == null)
             {
                 throw new EntityNotFoundException("Website not found.");
             }
-            return website;
+            return _mapper.Map<WebsiteDTO>(website);
         }
 
-        public async Task<Website> GetWebsiteByNameAsync(string name)
+        public async Task<WebsiteDTO> GetWebsiteByNameAsync(string name)
         {
             Website website = await _websiteRepository.GetWebsiteByNameAsync(name);
             if (website == null)
             {
                 throw new EntityNotFoundException("Website not found.");
             }
-            return website;
+            return _mapper.Map<WebsiteDTO>(website);
         }
 
-        public async Task<Website> GetWebsiteByUrlAsync(string url)
+        public async Task<WebsiteDTO> GetWebsiteByUrlAsync(string url)
         {
             if (!Uri.TryCreate(url, UriKind.Absolute, out Uri uri))
             {
                 throw new EntityNotValidException("Invalid URL");
             }
 
-            return await _websiteRepository.GetWebsiteByUrlAsync(url);
+            var website = await _websiteRepository.GetWebsiteByUrlAsync(url);
+            return _mapper.Map<WebsiteDTO>(website);
         }
 
-        public async Task CreateWebsiteAsync(Website website)
+        public async Task CreateWebsiteAsync(WebsiteDTO websiteDto)
         {
-            if (website == null)
+            if (websiteDto == null)
             {
                 throw new EntityNotFoundException("Website cannot be null");
             }
 
-            if (!Uri.IsWellFormedUriString(website.Url, UriKind.Absolute))
+            if (!Uri.IsWellFormedUriString(websiteDto.Url, UriKind.Absolute))
             {
                 throw new EntityNotValidException("Invalid URL format.");
             }
 
+            var website = _mapper.Map<Website>(websiteDto);
             await _websiteRepository.CreateWebsiteAsync(website);
         }
+
 
         public async Task UpdateWebsiteDescriptionAsync(int websiteId, string newDescription)
         {

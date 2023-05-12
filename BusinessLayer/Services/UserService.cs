@@ -1,4 +1,6 @@
-﻿using BusinessLayer.Services.Interfaces;
+﻿using AutoMapper;
+using BusinessLayer.DTOs;
+using BusinessLayer.Services.Interfaces;
 using DataLayer.Models;
 using DataLayer.Models.Exceptions;
 using DataLayer.Repositories.Interfaces;
@@ -11,57 +13,61 @@ namespace BusinessLayer.Services
     public class UserService : IUserService
     {
         private readonly IUserRepository _userRepository;
-        public UserService(IUserRepository userRepository)
+        private readonly IMapper _mapper;
+        public UserService(IUserRepository userRepository, IMapper mapper)
         {
             this._userRepository = userRepository;
+            this._mapper = mapper;
         }
 
-        public async Task<List<User>> GetAllUsersAsync()
+        public async Task<List<UserDTO>> GetAllUsersAsync()
         {
-            return await this._userRepository.GetAllUsersAsync();
+            var users = await this._userRepository.GetAllUsersAsync();
+            return _mapper.Map<List<UserDTO>>(users);
         }
 
-        public async Task<User> GetUserByIdAsync(int id)
+        public async Task<UserDTO> GetUserByIdAsync(int id)
         {
             var user = await _userRepository.GetUserByIdAsync(id);
             if (user == null)
             {
                 throw new EntityNotFoundException($"User not found.");
             }
-            return user;
+            return _mapper.Map<UserDTO>(user);
         }
 
-        public async Task<User> GetUserByEmailAsync(string email)
+        public async Task<UserDTO> GetUserByEmailAsync(string email)
         {
             var user = await _userRepository.GetUserByEmailAsync(email);
             if (user == null)
             {
                 throw new EntityNotFoundException($"User with email: {email} not found.");
             }
-            return user;
+            return _mapper.Map<UserDTO>(user);
         }
 
-        public async Task<User> GetUserByUsernameAsync(string username)
+        public async Task<UserDTO> GetUserByUsernameAsync(string username)
         {
             var user = await _userRepository.GetUserByUsernameAsync(username);
             if (user == null)
             {
                 throw new EntityNotFoundException($"User with username: {username} not found.");
             }
-            return user;
+            return _mapper.Map<UserDTO>(user);
         }
 
-        public async Task CreateUserAsync(User user)
+        public async Task CreateUserAsync(UserDTO userDTO)
         {
-            await this.GetUserByEmailAsync(user.Email);
-            await this.GetUserByUsernameAsync(user.Username);
+            await this.GetUserByEmailAsync(userDTO.Email);
+            await this.GetUserByUsernameAsync(userDTO.Username);
 
             // Hash the user's password
-            string hashedPassword = BCrypt.Net.BCrypt.HashPassword(user.Password);
+            string hashedPassword = BCrypt.Net.BCrypt.HashPassword(userDTO.Password);
 
             // Set the user's password to the hashed password
-            user.Password = hashedPassword;
+            userDTO.Password = hashedPassword;
 
+            var user = _mapper.Map<User>(userDTO);
             await _userRepository.CreateUserAsync(user);
         }
 
@@ -84,7 +90,7 @@ namespace BusinessLayer.Services
             bool oldPasswordMatches = BCrypt.Net.BCrypt.Verify(oldPassword, user.Password);
             if (!oldPasswordMatches)
             {
-                throw new OldPasswordMatchedException("The old password matches the current password, try agian.");
+                throw new OldPasswordMatchedException("The old password matches the current password, try again.");
             }
 
             // Hash the new password
@@ -92,7 +98,8 @@ namespace BusinessLayer.Services
 
             // Set the user's password to the hashed password
             user.Password = hashedPassword;
-            await _userRepository.UpdateUserPasswordAsync(userId, newPassword);
+
+            await _userRepository.UpdateUserPasswordAsync(userId, hashedPassword);
         }
 
         public async Task UpdateUserUrlPictureAsync(int userId, string newUrlPicture)
