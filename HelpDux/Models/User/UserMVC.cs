@@ -1,6 +1,7 @@
 ﻿using BusinessLayer.DTOs;
 using DataLayer.Models.Enum;
 using System.Collections.Generic;
+using WebLayer_HelpDux.Models.Review;
 
 namespace WebLayer_HelpDux.Models.User
 {
@@ -12,6 +13,6 @@ namespace WebLayer_HelpDux.Models.User
         public string Password { get; set; }
         public string PictureUrl { get; set; }
         public Roles Roles { get; set; }
-        public List<ReviewDTO> Reviews { get; set; }
+        public List<ReviewMVC> Reviews { get; set; }
     }
 }
