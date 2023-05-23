@@ -2,6 +2,7 @@
 using BusinessLayer.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace WebLayer_HelpDux.Controllers
 {
@@ -13,13 +14,10 @@ namespace WebLayer_HelpDux.Controllers
         {
             this._websiteService = websiteService;
         }
-
-
-        public async IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            IEnumerable<WebsiteDTO> websites = await this._websiteService.GetAllWebsitesAsync();
-
-            return this.View();
+            var websites = await _websiteService.GetAllWebsitesAsync();
+            return View(websites);
         }
     }
 }

@@ -19,10 +19,6 @@ namespace WebLayer_HelpDux.Models.Website
         public string ImageUrl { get; set; }
         public List<ReviewMVC> Reviews { get; set; }
 
-        public WebsiteMVC()
-        {
-        }
-
         public WebsiteMVC(int websiteId, string name, string url, string description, Tag tag, DateTime createdAt, DateTime updatedAt, bool isActive, string imageUrl, List<ReviewMVC> reviews)
         {
             WebsiteId = websiteId;

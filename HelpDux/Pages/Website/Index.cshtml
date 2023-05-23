@@ -1,0 +1,29 @@
+﻿@page
+@using WebLayer_HelpDux.Models.Website;
+@model List<WebsiteMVC>;
+
+<h1>Websites</h1>
+
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Created At</th>
+            <th>Is Active</th>
+            <th>Tag</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var website in Model)
+        {
+            <tr>
+                <td>@website.Name</td>
+                <td>@website.Description</td>
+                <td>@website.CreatedAt</td>
+                <td>@(website.IsActive ? "Active" : "Inactive")</td>
+                <td>@website.Tag</td>
+            </tr>
+        }
+    </tbody>
+</table>

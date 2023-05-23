@@ -5,17 +5,17 @@ namespace WebLayer_HelpDux.Controllers
 {
     public class HomeController : Controller
     {
-        public ActionResult Index()
+        public IActionResult Index()
         {
             return this.View();
         }
 
-        public ActionResult AboutUs()
+        public IActionResult AboutUs()
         {
             return this.View();
         }
 
-        public ActionResult ContactUs()
+        public IActionResult ContactUs()
         {
             return this.View();
         }

@@ -21,5 +21,19 @@ namespace BusinessLayer.DTOs
         public string ImageUrl { get; set; }
         public List<ReviewDTO> Reviews { get; set; }
 
+        public WebsiteDTO(int websiteId, string name, string url, string description, Tag tag, DateTime createdAt, DateTime updatedAt, bool isActive, string imageUrl, List<ReviewDTO> reviews)
+        {
+            WebsiteId = websiteId;
+            Name = name;
+            Url = url;
+            Description = description;
+            Tag = tag;
+            CreatedAt = createdAt;
+            UpdatedAt = updatedAt;
+            IsActive = isActive;
+            ImageUrl = imageUrl;
+            Reviews = reviews;
+        }
+
     }
 }

@@ -1,7 +1,13 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "_Layout";
 }
 
-<h1>_Layout</h1>
-
+<head>
+    <title>@ViewData["Title"]</title>
+    <!-- Add your CSS and other head elements here -->
+</head>
+<body>
+    <!-- Add your navigation bar, header, or any other common elements here -->
+    @RenderBody() <!-- This line calls the RenderBody method to render the content of the child pages -->
+    <!-- Add your footer, scripts, or any other common elements here -->
+</body>
