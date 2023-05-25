@@ -1,13 +1,68 @@
-﻿@{
-    ViewData["Title"] = "_Layout";
-}
-
+﻿<!DOCTYPE html>
+<html lang="en">
 <head>
-    <title>@ViewData["Title"]</title>
-    <!-- Add your CSS and other head elements here -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - HelpDux</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
 </head>
 <body>
-    <!-- Add your navigation bar, header, or any other common elements here -->
-    @RenderBody() <!-- This line calls the RenderBody method to render the content of the child pages -->
-    <!-- Add your footer, scripts, or any other common elements here -->
+    <header>
+        <ul class="navbar-nav mr-auto">
+            <a asp-controller="Home" asp-action="Index">
+                <img src="icon.png" alt="Logo" />
+            </a>
+            <li class="nav-item">
+                <a class="nav-link" asp-controller="Home" asp-action="Index">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" asp-controller="Website" asp-action="Index">Websites</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" asp-controller="Query" asp-action="Index">Queries</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" asp-controller="Home" asp-action="AboutUs">About Us</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" asp-controller="Home" asp-action="ContactUs">Contact Us</a>
+            </li>
+        </ul>
+
+        @if (User.Identity.IsAuthenticated)
+        {
+            <a asp-controller="Profile" asp-action="Index">
+                <img src="profile-icon.png" alt="Profile" />
+                <span>Profile</span>
+            </a>
+            <form asp-controller="Account" asp-action="Logout" method="post">
+                <button type="submit">Logout</button>
+            </form>
+        }
+        else
+        {
+            <a asp-controller="Account" asp-action="Login">Login</a>
+        }
+
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2023 - HelpDux - <a asp-area="" asp-page="/Privacy">Privacy</a>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
 </body>
+
+</html>

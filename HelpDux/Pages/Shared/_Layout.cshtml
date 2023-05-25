@@ -10,19 +10,40 @@
 <body>
     <header>
         <ul class="navbar-nav mr-auto">
+            <a asp-controller="Home" asp-action="Index">
+                <img src="icon.png" alt="Logo" />
+            </a>
+            <li class="nav-item">
+                <a class="nav-link" asp-controller="Home" asp-action="Index">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" asp-controller="Website" asp-action="Index">Websites</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" asp-controller="Query" asp-action="Index">Queries</a>
+            </li>
             <li class="nav-item">
                 <a class="nav-link" asp-controller="Home" asp-action="AboutUs">About Us</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" asp-controller="Home" asp-action="ContactUs">Contact Us</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" asp-controller="User" asp-action="Profile">User Profile</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" asp-controller="Website" asp-action="Index">Websites</a>
-            </li>           
         </ul>
+
+        @if (User.Identity.IsAuthenticated)
+        {
+            <a asp-controller="Profile" asp-action="Index">
+                <img src="profile-icon.png" alt="Profile" />
+                <span>Profile</span>
+            </a>
+            <form asp-controller="Account" asp-action="Logout" method="post">
+                <button type="submit">Logout</button>
+            </form>
+        }
+        else
+        {
+            <a asp-controller="Account" asp-action="Login">Login</a>
+        }
 
     </header>
     <div class="container">
@@ -43,4 +64,5 @@
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>
+
 </html>
