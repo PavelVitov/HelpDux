@@ -8,9 +8,9 @@ using WebLayer_HelpDux.Models.Website;
 
 namespace WebLayer_HelpDux.AutoMapper
 {
-    public class AutoMapperProfile : Profile
+    public class AutoMapperProfilePresBuss : Profile
     {
-        public AutoMapperProfile()
+        public AutoMapperProfilePresBuss()
         {
             CreateMap<UserDTO, UserMVC>()
                 .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.UserId))

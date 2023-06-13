@@ -7,9 +7,9 @@ using System.Linq;
 
 namespace BusinessLayer.AutoMapper
 {
-    public class AutoMapperProfile : Profile
+    public class AutoMapperProfileBussData : Profile
     {
-        public AutoMapperProfile()
+        public AutoMapperProfileBussData()
         {
             CreateMap<User, UserDTO>()
                 .ForMember(dest => dest.Reviews, opt => opt.MapFrom(src => src.Reviews));
@@ -24,8 +24,8 @@ namespace BusinessLayer.AutoMapper
             CreateMap<WebsiteDTO, Website>()
                 .ForMember(dest => dest.Reviews, opt => opt.MapFrom(src => src.Reviews.Select(r => new Review { ReviewId = r.ReviewId, Rating = r.Rating, CreatedAt = r.CreatedAt, UpdatedAt = r.UpdatedAt, UserId = r.UserId })));
             CreateMap<ReviewDTO, Review>()
-                .ForMember(dest => dest.Website.Name, opt => opt.MapFrom(src => src.WebsiteName))
-                .ForMember(dest => dest.User.Username, opt => opt.MapFrom(src => src.Username));
+                .ForPath(dest => dest.User.Username, opt => opt.MapFrom(src => src.Username));
+
         }
     }
 }

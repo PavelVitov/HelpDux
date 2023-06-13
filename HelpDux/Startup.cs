@@ -6,10 +6,13 @@ using DataLayer.Repositories;
 using DataLayer.Repositories.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
+using WebLayer_HelpDux.AutoMapper;
 
 namespace HelpDux
 {
@@ -34,7 +37,7 @@ namespace HelpDux
             services.AddRazorPages();
 
             //Mapper
-            services.AddAutoMapper(typeof(AutoMapperProfile));
+            services.AddAutoMapper(typeof(AutoMapperProfileBussData), typeof(AutoMapperProfilePresBuss));
 
             //Repositories
             services.AddScoped<IUserRepository, UserRepository>();
@@ -52,6 +55,20 @@ namespace HelpDux
 
             //MVC
             services.AddControllersWithViews();
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+
+
+
+            //Swagger
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo
+                { 
+                    Title = "Web API Services",
+                    Version = "v1",
+                    Description = "Web API Services Get Post"
+                });
+            });
 
         }
 
@@ -78,7 +95,6 @@ namespace HelpDux
 
             app.UseAuthorization();
 
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapDefaultControllerRoute();
@@ -88,6 +104,9 @@ namespace HelpDux
             {
                 endpoints.MapRazorPages();
             });
+
+            app.UseSwagger();
+
         }
     }
 }
