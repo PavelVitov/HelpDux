@@ -14,5 +14,22 @@ namespace WebLayer_HelpDux.Models.Review
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
 
+        public ReviewMVC()
+        {
+            // Default constructor
+        }
+
+        public ReviewMVC(int reviewId, string comment, int rating, int websiteId, string websiteName, int userId, string username, DateTime createdAt, DateTime updatedAt)
+        {
+            ReviewId = reviewId;
+            Comment = comment;
+            Rating = rating;
+            WebsiteId = websiteId;
+            WebsiteName = websiteName;
+            UserId = userId;
+            Username = username;
+            CreatedAt = createdAt;
+            UpdatedAt = updatedAt;
+        }
     }
 }

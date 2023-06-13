@@ -14,5 +14,20 @@ namespace WebLayer_HelpDux.Models.User
         public string PictureUrl { get; set; }
         public Roles Roles { get; set; }
         public List<ReviewMVC> Reviews { get; set; }
+        public UserMVC()
+        {
+            // Default constructor
+        }
+
+        public UserMVC(int userId, string username, string email, string password, string pictureUrl, Roles roles, List<ReviewMVC> reviews)
+        {
+            UserId = userId;
+            Username = username;
+            Email = email;
+            Password = password;
+            PictureUrl = pictureUrl;
+            Roles = roles;
+            Reviews = reviews;
+        }
     }
 }
